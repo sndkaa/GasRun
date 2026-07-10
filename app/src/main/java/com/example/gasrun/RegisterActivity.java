@@ -1,4 +1,4 @@
-package com.example.gasrun; // Pastikan nama package ini sesuai dengan punyamu!
+package com.example.gasrun;
 
 import android.content.Intent;
 import android.os.Bundle;

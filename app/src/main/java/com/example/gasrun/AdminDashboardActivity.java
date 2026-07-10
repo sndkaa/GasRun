@@ -56,7 +56,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private String selectedTipId = "";
     private static final int PICK_IMAGE_REQUEST = 1;
 
-    // 🚨 ENDPOINT API 🚨
+    // ENDPOINT API
     private static final String BASE_URL = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/";
     private static final String URL_INSERT = BASE_URL + "insert_tip.php";
     private static final String URL_UPDATE = BASE_URL + "update_tip.php";
@@ -236,7 +236,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         UserAdapter userAdapter = new UserAdapter(users);
         rvUserList.setAdapter(userAdapter);
 
-        // Ambil data user 
+        // Ambil data user
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_USERS,
                 response -> {
                     try {
