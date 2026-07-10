@@ -23,7 +23,7 @@ public class EditLariActivity extends AppCompatActivity {
     private String idLog;
     private SessionManager sessionManager;
 
-    private static final String URL_UPDATE_LOG = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/update_log.php";
+    private static final String URL_UPDATE_LOG = "http://gasrun-001-site1.dtempurl.com/api/update_log.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +90,8 @@ public class EditLariActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };

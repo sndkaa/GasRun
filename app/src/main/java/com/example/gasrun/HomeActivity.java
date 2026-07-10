@@ -43,8 +43,8 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView tvTotalJarak, tvTotalDurasi;
 
-    private static final String URL_GET_SUMMARY = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/get_summary.php?id_user=";
-    private static final String URL_GET_TIPS = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/get_tips.php";
+    private static final String URL_GET_SUMMARY = "http://gasrun-001-site1.dtempurl.com/api/get_summary.php?id_user=";
+    private static final String URL_GET_TIPS = "http://gasrun-001-site1.dtempurl.com/api/get_tips.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,18 +80,13 @@ public class HomeActivity extends AppCompatActivity {
 
         btnLogout = findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
-            // 1. Konfigurasi Google Client
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestEmail()
                     .build();
             GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(HomeActivity.this, gso);
 
-            // 2. Paksa Google untuk hapus cache akun terakhir (Sign Out)
             mGoogleSignInClient.signOut().addOnCompleteListener(HomeActivity.this, task -> {
-                // 3. Keluar juga dari Firebase Auth
                 FirebaseAuth.getInstance().signOut();
-
-                // 4. Jalankan fungsi logout bawaan aplikasi kamu (SessionManager MySQL)
                 sessionManager.logoutUser();
                 finish();
             });
@@ -112,18 +107,16 @@ public class HomeActivity extends AppCompatActivity {
                             JSONArray jsonArray = jsonObject.getJSONArray("data");
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject tipObj = jsonArray.getJSONObject(i);
-
-                                // 👇 INI YANG DIUPDATE: Nangkep image_url dari JSON 👇
                                 tipList.add(new Tip(
                                         tipObj.getString("id_tip"),
                                         tipObj.getString("judul_tip"),
                                         tipObj.getString("konten"),
-                                        tipObj.getString("image_url") // 👈 Eksekusi nangkep URL gambar
+                                        tipObj.getString("image_url")
                                 ));
                             }
                             tipAdapter.notifyDataSetChanged();
                         } else {
-                            Toast.makeText(HomeActivity.this, "Yah, gagal mengambil data nih.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(HomeActivity.this, "Gagal mengambil data tips.", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -134,11 +127,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
-
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
@@ -151,27 +144,39 @@ public class HomeActivity extends AppCompatActivity {
                         JSONObject jsonObject = new JSONObject(response);
                         if (jsonObject.getBoolean("success")) {
                             JSONObject dataObj = jsonObject.getJSONObject("data");
-                            String jarak = dataObj.getString("total_jarak");
-                            String durasi = dataObj.getString("total_durasi");
+
+                            // 👇 ANTI-CRASH: Pakai optString, kalau gagal kembalikan "0" 👇
+                            String jarak = dataObj.optString("total_jarak", "0");
+                            String durasi = dataObj.optString("total_durasi", "0");
+
+                            // Jaga-jaga MySQL ngembaliin kata "null"
+                            if (jarak.equals("null")) jarak = "0";
+                            if (durasi.equals("null")) durasi = "0";
 
                             tvTotalJarak.setText(jarak + " KM");
                             tvTotalDurasi.setText(durasi + " Menit");
+                        } else {
+                            // Munculin pesan kalau sukses = false dari PHP
+                            Toast.makeText(HomeActivity.this, "Gagal muat summary: " + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        Toast.makeText(HomeActivity.this, "Error baca JSON summary", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
+                    // 👇 JANGAN DIKOSONGIN! Biar kita tau errornya apa 👇
+                    Toast.makeText(HomeActivity.this, "Error Server Summary: " + error.getMessage(), Toast.LENGTH_LONG).show();
                 }) {
 
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
-
         Volley.newRequestQueue(this).add(stringRequest);
     }
 

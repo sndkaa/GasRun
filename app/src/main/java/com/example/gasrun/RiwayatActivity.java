@@ -31,8 +31,8 @@ public class RiwayatActivity extends AppCompatActivity {
     private List<RunLog> logList;
     private SessionManager sessionManager;
 
-    private static final String URL_GET_LOGS = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/get_logs.php?id_user=";
-    private static final String URL_DELETE_LOG = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/delete_log.php";
+    private static final String URL_GET_LOGS = "http://gasrun-001-site1.dtempurl.com/api/get_logs.php?id_user=";
+    private static final String URL_DELETE_LOG = "http://gasrun-001-site1.dtempurl.com/api/delete_log.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,20 +96,21 @@ public class RiwayatActivity extends AppCompatActivity {
                         cekDataKosong();
 
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        // NAMPILIN ERROR SERVER JIKA BUKAN JSON
+                        Toast.makeText(RiwayatActivity.this, "Error Load: " + response, Toast.LENGTH_LONG).show();
                         cekDataKosong();
                     }
                 },
                 error -> {
-                    Toast.makeText(RiwayatActivity.this, "Koneksi Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RiwayatActivity.this, "Koneksi Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     cekDataKosong();
                 }) {
 
-            // TAMBAHAN GET HEADERS
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
@@ -160,10 +161,11 @@ public class RiwayatActivity extends AppCompatActivity {
                             Toast.makeText(RiwayatActivity.this, "Gagal: " + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        // 👇 INI RADARNYA! Biar ketahuan server ngomong apa! 👇
+                        Toast.makeText(RiwayatActivity.this, "Respon Server: " + response, Toast.LENGTH_LONG).show();
                     }
                 },
-                error -> Toast.makeText(RiwayatActivity.this, "Server Error", Toast.LENGTH_SHORT).show()) {
+                error -> Toast.makeText(RiwayatActivity.this, "Server Error: Cek koneksi!", Toast.LENGTH_SHORT).show()) {
 
             @Override
             protected Map<String, String> getParams() {
@@ -173,11 +175,11 @@ public class RiwayatActivity extends AppCompatActivity {
                 return params;
             }
 
-            // TAMBAHAN GET HEADERS
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };

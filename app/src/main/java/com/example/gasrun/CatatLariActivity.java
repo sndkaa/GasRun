@@ -37,8 +37,8 @@ public class CatatLariActivity extends AppCompatActivity {
     private List<String> listIdKategori;
     private ArrayAdapter<String> spinnerAdapter;
 
-    private static final String URL_GET_CATEGORIES = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/get_categories.php";
-    private static final String URL_CATAT_LARI = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/create_log.php";
+    private static final String URL_GET_CATEGORIES = "http://gasrun-001-site1.dtempurl.com/api/get_categories.php";
+    private static final String URL_CATAT_LARI = "http://gasrun-001-site1.dtempurl.com/api/create_log.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +111,8 @@ public class CatatLariActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
@@ -163,7 +164,8 @@ public class CatatLariActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };

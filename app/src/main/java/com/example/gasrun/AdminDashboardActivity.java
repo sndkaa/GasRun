@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -57,7 +58,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     // ENDPOINT API
-    private static final String BASE_URL = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/";
+    private static final String BASE_URL = "http://gasrun-001-site1.dtempurl.com/api/";
     private static final String URL_INSERT = BASE_URL + "insert_tip.php";
     private static final String URL_UPDATE = BASE_URL + "update_tip.php";
     private static final String URL_DELETE = BASE_URL + "delete_tip.php";
@@ -89,7 +90,15 @@ public class AdminDashboardActivity extends AppCompatActivity {
 
             @Override
             public void onDelete(String idTip) {
-                hapusTipsFromServer(idTip);
+                // Tambahkan dialog konfirmasi hapus
+                new AlertDialog.Builder(AdminDashboardActivity.this)
+                        .setTitle("Konfirmasi Hapus")
+                        .setMessage("Apakah Anda yakin ingin menghapus tips ini?")
+                        .setPositiveButton("Hapus", (dialog, which) -> {
+                            hapusTipsFromServer(idTip);
+                        })
+                        .setNegativeButton("Batal", null)
+                        .show();
             }
         });
         rvAdminTips.setAdapter(adapter);
@@ -127,7 +136,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
@@ -158,7 +168,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
@@ -257,7 +268,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
@@ -310,12 +322,22 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 response -> {
                     loadDashboardData();
                     Toast.makeText(this, "Tips Berhasil Dihapus!", Toast.LENGTH_SHORT).show();
-                }, error -> {}) {
+                }, error -> {
+            Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+        }) {
+
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("id_tip", idTip);
+                params.put("id_tip", idTip); // INI HARUS SAMA DENGAN PHP
                 return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                return headers;
             }
         };
         Volley.newRequestQueue(this).add(stringRequest);

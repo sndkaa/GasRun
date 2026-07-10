@@ -14,7 +14,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-// 👇 IMPORT TAMBAHAN UNTUK FIREBASE & GOOGLE SIGN-IN 👇
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -35,17 +34,13 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText etEmailLogin, etPasswordLogin;
-    private Button btnLogin;
-
-    // Google Sign-In
-    private Button btnGoogleSignIn;
+    private Button btnLogin, btnGoogleSignIn;
     private TextView tvKeHalamanRegister;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
 
-    // Link Ngrok
-    private static final String URL_LOGIN = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/login.php";
+    private static final String URL_LOGIN = "http://gasrun-001-site1.dtempurl.com/api/login.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,95 +57,61 @@ public class LoginActivity extends AppCompatActivity {
         etPasswordLogin = findViewById(R.id.etPasswordLogin);
         btnLogin = findViewById(R.id.btnLogin);
         btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
-
-
         tvKeHalamanRegister = findViewById(R.id.tvKeHalamanRegister);
-        tvKeHalamanRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Pindah ke halaman RegisterActivity
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
+
+        tvKeHalamanRegister.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
 
-        // Inisialisasi Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-
-        // Konfigurasi Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // Trigger tombol Masuk (manual)
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = etEmailLogin.getText().toString().trim();
-                String password = etPasswordLogin.getText().toString().trim();
-
-                if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Email dan Password wajib diisi", Toast.LENGTH_SHORT).show();
-                } else {
-                    loginUser(email, password);
-                }
+        btnLogin.setOnClickListener(v -> {
+            String email = etEmailLogin.getText().toString().trim();
+            String password = etPasswordLogin.getText().toString().trim();
+            if (email.isEmpty() || password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Email dan Password wajib diisi", Toast.LENGTH_SHORT).show();
+            } else {
+                loginUser(email, password);
             }
         });
 
-        // Trigger tombol Masuk (Google)
         btnGoogleSignIn.setOnClickListener(v -> {
-            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            startActivityForResult(mGoogleSignInClient.getSignInIntent(), RC_SIGN_IN);
         });
     }
 
-    // Volley Login biasa
     private void loginUser(String email, String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN,
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        boolean success = jsonObject.getBoolean("success");
-                        String message = jsonObject.getString("message");
-
-                        if (success) {
+                        if (jsonObject.getBoolean("success")) {
                             JSONObject data = jsonObject.getJSONObject("data");
                             String nama = data.getString("nama");
                             String idUser = data.getString("id_user");
-                            // 👇 BARU: Ambil data role & bersihkan spasi gaib 👇
                             String role = data.getString("role").trim();
 
-                            SessionManager sessionManager = new SessionManager(LoginActivity.this);
-                            sessionManager.createLoginSession(idUser, nama);
+                            new SessionManager(LoginActivity.this).createLoginSession(idUser, nama);
 
-                            // 👇 BARU: GERBANG PENYEKAT UTAMA (ADMIN VS USER) 👇
                             if (role.equalsIgnoreCase("admin")) {
-                                // Kalau admin, terbangkan ke panel admin VIP
-                                Toast.makeText(LoginActivity.this, "Selamat datang Admin " + nama + "! 🔥", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
-                                startActivity(intent);
-                                finish();
+                                startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
                             } else {
-                                // Kalau user biasa, masuk halaman home seperti biasa
-                                Toast.makeText(LoginActivity.this, "Welcome back, " + nama + "! 🏃‍♂️", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                finish();
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             }
-
+                            finish();
                         } else {
-                            Toast.makeText(LoginActivity.this, "Gagal: " + message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Gagal: " + jsonObject.getString("message"), Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "Error membaca data JSON", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Error JSON", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> {
-                    Toast.makeText(LoginActivity.this, "Gagal nyambung ke server: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                }) {
+                error -> Toast.makeText(LoginActivity.this, "Gagal nyambung ke server!", Toast.LENGTH_SHORT).show()) {
 
             @Override
             protected Map<String, String> getParams() {
@@ -163,94 +124,63 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    // GOOGLE SIGN-IN
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
-                // Berhasil pilih akun Google, lanjut autentikasi ke Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account.getIdToken());
+                firebaseAuthWithGoogle(GoogleSignIn.getSignedInAccountFromIntent(data).getResult(ApiException.class).getIdToken());
             } catch (ApiException e) {
-                Toast.makeText(this, "Google sign in batal/gagal", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Google Sign In Gagal", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    // AUTENTIKASI FIREBASE
     private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
+        mAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // BERHASIL LOGIN VIA GOOGLE!
                         FirebaseUser user = mAuth.getCurrentUser();
-                        String namaGoogle = user.getDisplayName();
-                        String emailGoogle = user.getEmail();
-
-                        syncGoogleToMySQL(namaGoogle, emailGoogle);
-
+                        syncGoogleToMySQL(user.getDisplayName(), user.getEmail());
                     } else {
-                        Toast.makeText(LoginActivity.this, "Autentikasi Firebase Gagal", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Auth Firebase Gagal", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
     private void syncGoogleToMySQL(String nama, String email) {
-        String URL_GOOGLE_SYNC = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/login_google.php";
+        String URL_GOOGLE_SYNC = "http://gasrun-001-site1.dtempurl.com/api/login_google.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_GOOGLE_SYNC,
                 response -> {
                     try {
                         JSONObject jsonObject = new JSONObject(response);
-                        boolean success = jsonObject.getBoolean("success");
-
-                        if (success) {
+                        if (jsonObject.getBoolean("success")) {
                             JSONObject data = jsonObject.getJSONObject("data");
-                            String idUser = data.getString("id_user");
-                            String namaUser = data.getString("nama");
-
-                            // 👇 BARU: Ambil juga role di Google Login (optString agar tidak error) 👇
+                            new SessionManager(LoginActivity.this).createLoginSession(data.getString("id_user"), data.getString("nama"));
                             String role = data.optString("role", "user").trim();
 
-                            SessionManager sessionManager = new SessionManager(LoginActivity.this);
-                            sessionManager.createLoginSession(idUser, namaUser);
-
-                            // 👇 BARU: GERBANG PENYEKAT ADMIN VS USER (GOOGLE LOGIN) 👇
                             if (role.equalsIgnoreCase("admin")) {
-                                Toast.makeText(LoginActivity.this, "Berhasil masuk sebagai Admin: " + namaUser, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(LoginActivity.this, AdminDashboardActivity.class);
-                                startActivity(intent);
-                                finish();
+                                startActivity(new Intent(LoginActivity.this, AdminDashboardActivity.class));
                             } else {
-                                Toast.makeText(LoginActivity.this, "Berhasil masuk sebagai: " + namaUser, Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                finish();
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                             }
-
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Gagal sinkron database MySQL", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(LoginActivity.this, "Error baca JSON MySQL", Toast.LENGTH_SHORT).show();
+                        // 👇 INI YANG BENER: Nampilin teks asli balesan PHP ke layar HP 👇
+                        Toast.makeText(LoginActivity.this, "Respon Server: " + response, Toast.LENGTH_LONG).show();
                     }
                 },
-                error -> {
-                    Toast.makeText(LoginActivity.this, "Gagal nyambung ke PHP: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-                }) {
+                error -> Toast.makeText(LoginActivity.this, "Gagal nyambung ke PHP", Toast.LENGTH_SHORT).show()) {
 
             @Override
             protected Map<String, String> getParams() {
@@ -263,12 +193,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("ngrok-skip-browser-warning", "12345");
+                headers.put("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36");
+                headers.put("Accept", "application/json, text/html, */*");
                 return headers;
             }
         };
-
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
+        Volley.newRequestQueue(this).add(stringRequest);
     }
 }
