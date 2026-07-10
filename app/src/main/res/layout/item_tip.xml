@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="12dp"
+    android:background="#FFFFFF"
+    android:elevation="2dp"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/ivGambarTip"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="8dp"
+        android:background="#E0E0E0" />
+
+    <TextView
+        android:id="@+id/tvJudulTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Judul Artikel Kesehatan"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/tvKontenTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Isi konten artikel akan dimunculkan secara dinamis dari database di sini..."
+        android:textSize="14sp"
+        android:textColor="#757575"/>
+</LinearLayout>

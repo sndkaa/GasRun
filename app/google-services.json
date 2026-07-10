@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "245241051700",
+    "project_id": "gasrun-727be",
+    "storage_bucket": "gasrun-727be.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245241051700:android:b4ad15e246c054e4332861",
+        "android_client_info": {
+          "package_name": "com.example.gasrun"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245241051700-cbl3c86uivakv0520i98gnmq9nregina.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.gasrun",
+            "certificate_hash": "f1a6e9c9c6a51870f6e306e770e0d26517f86843"
+          }
+        },
+        {
+          "client_id": "245241051700-7uc2jk8s635pund8fgvl79kmtmq9fjg3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDv3QZfM4Z4I60ZNvlyOQgh1xPfJX8jNWg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245241051700-7uc2jk8s635pund8fgvl79kmtmq9fjg3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="12dp"
+    android:layout_marginBottom="8dp"
+    android:elevation="1dp">
+
+    <TextView
+        android:id="@+id/tvAdminJudulTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Judul Tips"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#212121"/>
+
+    <TextView
+        android:id="@+id/tvAdminKontenTip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Konten..."
+        android:textSize="13sp"
+        android:textColor="#757575"
+        android:maxLines="2"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnActionEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EDIT"
+            android:textSize="12sp"
+            android:backgroundTint="#2196F3"
+            android:textColor="#FFFFFF"
+            android:layout_marginEnd="8dp"
+            style="?android:attr/buttonStyleSmall"/>
+
+        <Button
+            android:id="@+id/btnActionHapus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HAPUS"
+            android:textSize="12sp"
+            android:backgroundTint="#E91E63"
+            android:textColor="#FFFFFF"
+            style="?android:attr/buttonStyleSmall"/>
+    </LinearLayout>
+</LinearLayout>

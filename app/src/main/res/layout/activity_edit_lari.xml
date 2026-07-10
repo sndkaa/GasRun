@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="#F5F5F5">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Edit Aktivitas Lari ✏️"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:textColor="#212121"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ID Kategori (Contoh: CAT-0001)" />
+    <EditText android:id="@+id/etEditKategori" android:layout_width="match_parent" android:layout_height="50dp" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="12dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Jarak (KM)" />
+    <EditText android:id="@+id/etEditJarak" android:layout_width="match_parent" android:layout_height="50dp" android:inputType="numberDecimal" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="12dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Durasi (Menit)" />
+    <EditText android:id="@+id/etEditDurasi" android:layout_width="match_parent" android:layout_height="50dp" android:inputType="number" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="12dp"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Tanggal (YYYY-MM-DD)" />
+    <EditText android:id="@+id/etEditTanggal" android:layout_width="match_parent" android:layout_height="50dp" android:inputType="date" android:background="#FFFFFF" android:padding="10dp" android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/btnSimpanEdit"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="SIMPAN PERUBAHAN"
+        android:backgroundTint="#FF9800"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold" />
+</LinearLayout>
