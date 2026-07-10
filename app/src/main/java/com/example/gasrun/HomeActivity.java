@@ -13,7 +13,7 @@ import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-// 👇 IMPORT TAMBAHAN UNTUK LOGOUT GOOGLE & FIREBASE 👇
+// LOGOUT GOOGLE & FIREBASE
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;

@@ -9,13 +9,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Catat Latihan Lari ⏱️"
+        android:text="Catat Latihan Lari"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="#212121"
+        android:layout_marginTop="35dp"
         android:layout_marginBottom="8dp" />
-
-
 
     <TextView
         android:layout_width="match_parent"

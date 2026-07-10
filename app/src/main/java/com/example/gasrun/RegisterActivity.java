@@ -25,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText etNama, etEmail, etPassword;
     private Button btnRegister;
-    private TextView tvKeHalamanLogin; // 👇 Variabel baru untuk teks login
+    private TextView tvKeHalamanLogin;
 
     // Link API Ngrok
     private static final String URL_REGISTER = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/register.php";
@@ -35,25 +35,23 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // 1. Hubungkan variabel Java dengan ID di file XML
         etNama = findViewById(R.id.etNama);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
         btnRegister = findViewById(R.id.btnRegister);
 
-        // 👇 HUBUNGKAN DAN HIDUPKAN TEKS LINK LOGIN 👇
         tvKeHalamanLogin = findViewById(R.id.tvKeHalamanLogin);
         tvKeHalamanLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Lempar kembali user ke halaman Login
+                // Lempar user ke halaman Login
                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish(); // Tutup halaman register biar memori HP nggak penuh
             }
         });
 
-        // 2. Berikan aksi saat tombol "DAFTAR SEKARANG" diklik
+        // Trigger "DAFTAR SEKARANG" diklik
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,33 +59,32 @@ public class RegisterActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
 
-                // 👇 VALIDASI LAPIS BAJA DIMULAI 👇
 
-                // A. Validasi form tidak boleh kosong
+                // Validasi form tidak boleh kosong
                 if (nama.isEmpty() || email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(RegisterActivity.this, "Ups! Semua kolom harus diisi ya!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // B. Validasi Nama (Hanya boleh huruf dan spasi)
+                // Validasi Nama (Hanya boleh huruf dan spasi)
                 if (!nama.matches("^[a-zA-Z\\s]+$")) {
                     Toast.makeText(RegisterActivity.this, "Nama lengkap tidak boleh mengandung angka atau simbol!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // C. Validasi Email (Cek format email standar)
+                //  Validasi Email (Cek format email standar)
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Toast.makeText(RegisterActivity.this, "Format email tidak valid (contoh: gasrun@gmail.com)!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // D. Validasi Password (Min 6 karakter, ada huruf besar, huruf kecil, dan angka)
+                // Validasi Password (Min 6 karakter, ada huruf besar, huruf kecil, dan angka)
                 if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{6,}$")) {
                     Toast.makeText(RegisterActivity.this, "Password minimal 6 karakter, wajib ada huruf besar, huruf kecil, dan angka!", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                // Kalau lolos semua hadangan di atas, baru eksekusi Volley!
+                // Kalau Valid semua, baru eksekusi Volley
                 registerUser(nama, email, password);
             }
         });

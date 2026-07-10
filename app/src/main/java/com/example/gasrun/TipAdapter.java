@@ -7,8 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.bumptech.glide.Glide; // 👈 Library penarik gambar dari internet
-
+import com.bumptech.glide.Glide;
 import java.util.List;
 
 public class TipAdapter extends RecyclerView.Adapter<TipAdapter.TipViewHolder> {

@@ -75,7 +75,7 @@
         android:backgroundTint="#FFFFFF"
         android:textColor="#757575"
         android:text="Masuk dengan Google"
-        android:drawableLeft="@android:drawable/ic_menu_myplaces" android:padding="12dp" />
+        android:padding="12dp" />
 
     <TextView
         android:id="@+id/tvKeHalamanRegister"

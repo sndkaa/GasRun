@@ -159,7 +159,7 @@ public class CatatLariActivity extends AppCompatActivity {
                 return params;
             }
 
-            // TAMBAHAN GET HEADERS
+            // GET HEADERS
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();

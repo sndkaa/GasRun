@@ -13,7 +13,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        // Menunda eksekusi selama 2500 milidetik (2,5 detik)
+        // Menunda selama (2,5 detik)
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
             // Panggil SessionManager untuk cek status login
@@ -27,7 +27,7 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(SplashActivity.this, LoginActivity.class));
             }
 
-            finish(); // Tutup Splash Screen agar tidak bisa di-back
+            finish();
 
         }, 2500);
     }

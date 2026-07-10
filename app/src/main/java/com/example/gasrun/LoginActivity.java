@@ -37,14 +37,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmailLogin, etPasswordLogin;
     private Button btnLogin;
 
-    // Variabel baru untuk Google Sign-In
+    // Google Sign-In
     private Button btnGoogleSignIn;
     private TextView tvKeHalamanRegister;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private static final int RC_SIGN_IN = 9001;
 
-    // Pastikan link Ngrok ini masih aktif di CMD kamu ya!
+    // Link Ngrok
     private static final String URL_LOGIN = "https://untying-slinky-rigging.ngrok-free.dev/gasrun_api/api/login.php";
 
     @Override
@@ -52,21 +52,18 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Abaikan session check di sini karena sudah dipindah ke SplashActivity,
-        // tapi kalau mau dibiarkan juga aman sebagai double check.
         SessionManager sessionManager = new SessionManager(this);
         if (sessionManager.isLoggedIn()) {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
 
-        // 1. Hubungkan variabel dengan ID di XML
         etEmailLogin = findViewById(R.id.etEmailLogin);
         etPasswordLogin = findViewById(R.id.etPasswordLogin);
         btnLogin = findViewById(R.id.btnLogin);
-        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn); // ID Button Google di XML
+        btnGoogleSignIn = findViewById(R.id.btnGoogleSignIn);
 
-        // 👇 Hubungkan dan hidupkan tombol Register manual 👇
+
         tvKeHalamanRegister = findViewById(R.id.tvKeHalamanRegister);
         tvKeHalamanRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,17 +74,17 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // 2. Inisialisasi Firebase Auth
+        // Inisialisasi Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-        // 3. Konfigurasi Google Sign-In
+        // Konfigurasi Google Sign-In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        // 4. Aksi saat tombol MASUK biasa ditekan
+        // Trigger tombol Masuk (manual)
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,21 +92,21 @@ public class LoginActivity extends AppCompatActivity {
                 String password = etPasswordLogin.getText().toString().trim();
 
                 if (email.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(LoginActivity.this, "Email dan Password wajib diisi bro!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Email dan Password wajib diisi", Toast.LENGTH_SHORT).show();
                 } else {
                     loginUser(email, password);
                 }
             }
         });
 
-        // 5. Aksi saat tombol Masuk dengan Google ditekan
+        // Trigger tombol Masuk (Google)
         btnGoogleSignIn.setOnClickListener(v -> {
             Intent signInIntent = mGoogleSignInClient.getSignInIntent();
             startActivityForResult(signInIntent, RC_SIGN_IN);
         });
     }
 
-    // Fungsi bawaan Volley untuk Login biasa
+    // Volley Login biasa
     private void loginUser(String email, String password) {
         StringRequest stringRequest = new StringRequest(Request.Method.POST, URL_LOGIN,
                 response -> {
@@ -175,7 +172,7 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(stringRequest);
     }
 
-    // 👇 FUNGSI BARU UNTUK MENANGKAP HASIL GOOGLE SIGN-IN 👇
+    // GOOGLE SIGN-IN
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -192,7 +189,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // 👇 FUNGSI BARU UNTUK AUTENTIKASI FIREBASE 👇
+    // AUTENTIKASI FIREBASE
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)

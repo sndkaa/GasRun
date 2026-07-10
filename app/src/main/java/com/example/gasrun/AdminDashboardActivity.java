@@ -45,10 +45,8 @@ public class AdminDashboardActivity extends AppCompatActivity {
     private List<Tip> tipList;
     private SessionManager sessionManager;
 
-    // Jendela Dialog PopUp
     private BottomSheetDialog formDialog, userListDialog;
 
-    // Komponen di dalam PopUp Form
     private EditText etJudulTip, etKontenTip;
     private ImageView ivPreviewGambar;
     private Button btnSimpanTip;
@@ -86,7 +84,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         adapter = new AdminTipAdapter(tipList, new AdminTipAdapter.OnTipActionListener() {
             @Override
             public void onEdit(Tip tip) {
-                bukaDialogForm(tip); // Masuk mode edit bawa data
+                bukaDialogForm(tip);
             }
 
             @Override
@@ -96,10 +94,10 @@ public class AdminDashboardActivity extends AppCompatActivity {
         });
         rvAdminTips.setAdapter(adapter);
 
-        // Aksi klik kartu total user
+        // Trigger card total user
         cardTotalUsers.setOnClickListener(v -> bukaDialogUserList());
 
-        // Aksi klik menu tambah tips
+        // Trigger menu tambah tips
         btnTambahTipMenu.setOnClickListener(v -> bukaDialogForm(null));
 
         btnAdminLogout.setOnClickListener(v -> {
@@ -167,7 +165,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(stringRequest);
     }
 
-    // 👇 POPUP DIALOG FORM TAMBAH / EDIT 👇
+    //  FORM TAMBAH / EDIT
     private void bukaDialogForm(@Nullable Tip tip) {
         formDialog = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_form_tip, null);
@@ -180,7 +178,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         ivPreviewGambar = view.findViewById(R.id.ivPreviewGambar);
         btnSimpanTip = view.findViewById(R.id.btnSimpanTip);
 
-        bitmapGambar = null; // Reset tampungan gambar
+        bitmapGambar = null;
 
         if (tip != null) {
             isEditMode = true;
@@ -226,7 +224,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         formDialog.show();
     }
 
-    // 👇 POPUP DIALOG DAFTAR USER 👇
+    // DAFTAR USER
     private void bukaDialogUserList() {
         userListDialog = new BottomSheetDialog(this);
         View view = getLayoutInflater().inflate(R.layout.dialog_user_list, null);
@@ -238,7 +236,7 @@ public class AdminDashboardActivity extends AppCompatActivity {
         UserAdapter userAdapter = new UserAdapter(users);
         rvUserList.setAdapter(userAdapter);
 
-        // Ambil data user dari server
+        // Ambil data user 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, URL_USERS,
                 response -> {
                     try {

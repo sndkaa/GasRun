@@ -3,7 +3,7 @@ package com.example.gasrun;
 public class RunLog {
     private String idLog, idCategory, namaKategori, tanggalLari, jarakKm, durasiMenit;
 
-    // Constructor sekarang ditambah idCategory
+    // Constructor
     public RunLog(String idLog, String idCategory, String namaKategori, String tanggalLari, String jarakKm, String durasiMenit) {
         this.idLog = idLog;
         this.idCategory = idCategory;

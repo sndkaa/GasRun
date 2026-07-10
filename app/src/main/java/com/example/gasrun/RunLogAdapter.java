@@ -18,7 +18,7 @@ public class RunLogAdapter extends RecyclerView.Adapter<RunLogAdapter.RunLogView
         void onItemLongClick(RunLog log, int position);
     }
 
-    // Constructor sekarang minta listener juga
+    // Constructor
     public RunLogAdapter(List<RunLog> logList, OnItemLongClickListener listener) {
         this.logList = logList;
         this.listener = listener;
@@ -40,7 +40,7 @@ public class RunLogAdapter extends RecyclerView.Adapter<RunLogAdapter.RunLogView
         holder.tvLogJarak.setText(log.getJarakKm() + " KM");
         holder.tvLogDurasi.setText(log.getDurasiMenit() + " Menit");
 
-        // Aksi ketika kartu ditahan agak lama
+        // Trigger card ditahan agak lama
         holder.itemView.setOnLongClickListener(v -> {
             listener.onItemLongClick(log, position);
             return true; // Beri tahu Android kalau klik tahan sudah diproses
